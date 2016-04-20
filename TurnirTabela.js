@@ -1,9 +1,10 @@
-// jQueryId: TurnirTabela.ts 18608 2016-04-11 11:10:36Z cigaly jQuery
+// jQueryId: TurnirTabela.ts 18608 2016-04-11 11:10:36Z cigaly $
 /// <reference path="include/jquery/jquery.d.ts"/>
 /// <reference path="include/jqueryui/jqueryui.d.ts"/>
 /// <reference path="include/misc.d.ts"/>
 /// <reference path="include/es6-promise/es6-promise.d.ts" />
 var TurnirTabela;
+(function($) {
 (function (TurnirTabela) {
     var TeamMatchDisplay = (function () {
         function TeamMatchDisplay(urlArhivaPartija, urlArhivaIgrac, whiteLabel, blackLabel) {
@@ -22,7 +23,7 @@ var TurnirTabela;
         };
         TeamMatchDisplay.prototype.renderingContext = function (data) {
             var isWhite = this.isWhite(data.whites);
-            return jQuery.extend({
+            return $.extend({
                 urlArhivaPartija: this.urlArhivaPartija,
                 urlArhivaIgrac: this.urlArhivaIgrac,
                 whiteLabel: this.whiteLabel,
@@ -42,13 +43,13 @@ var TurnirTabela;
             this.teamMatches = {};
             this.props = props;
             this.turnirId = props.turnirId;
-            this.table = jQuery(table);
+            this.table = $(table);
             this.tmd = new TeamMatchDisplay(props.urlArhivaPartija, props.urlArhivaIgrac);
         }
         Internal.prototype.showTeamMatch = function (st, target) {
             var position = target.position();
-            jQuery(".team_match").hide();
-            jQuery("body").append(st.hide());
+            $(".team_match").hide();
+            $("body").append(st.hide());
             var h = st.height();
             var diag_top = position.top + h > this.table_bottom ? this.table_bottom - h : position.top;
             st.css({
@@ -61,32 +62,32 @@ var TurnirTabela;
         };
         Internal.prototype.initTeamMatchesDisplay = function () {
             var _this = this;
-            jQuery("a.team_match_link").parent().click(function (event) {
-                var target = jQuery(event.currentTarget);
+            $("a.team_match_link").parent().click(function (event) {
+                var target = $(event.currentTarget);
                 var uid = target.find(".team_match_link").data('uid');
                 new Promise(function (fulfill, reject) {
                     if (uid in _this.teamMatches) {
                         fulfill(_this.teamMatches[uid]);
                     }
                     else {
-                        jQuery.getJSON('service/team_match/' + _this.turnirId + '/' + uid)
+                        $.getJSON('service/team_match/' + _this.turnirId + '/' + uid)
                             .then(function (response) {
                             _this.teamMatches[uid] = response;
                             fulfill(response);
                         }, function (xhr, status, exception) { return reject(exception); });
                     }
                 })
-                    .then(function (value) { return _this.showTeamMatch(jQuery(_this.tmd.render(_this.teamMatches[uid])).css('background-color', 'white'), target); }, function (error) { return console.log("Exception: ", error); });
+                    .then(function (value) { return _this.showTeamMatch($(_this.tmd.render(_this.teamMatches[uid])).css('background-color', 'white'), target); }, function (error) { return console.log("Exception: ", error); });
                 return false;
             }).mouseout(function (event) {
                 if (event.target.tagName == 'TD') {
-                    jQuery(".team_match").hide();
+                    $(".team_match").hide();
                 }
                 return false;
             }).keypress(function (event) {
                 console.log('keypress', event);
                 if (event.keyCode == 27) {
-                    jQuery(".team_match").hide();
+                    $(".team_match").hide();
                 }
             })
                 .keydown(function (event) { return console.log('keydown', event); })
@@ -99,14 +100,14 @@ var TurnirTabela;
             }
             if (game.id) {
                 if (game.teams == true) {
-                    return this.props.gameLink_extra(jQuery("<a>").attr({
+                    return this.props.gameLink_extra($("<a>").attr({
                         target: "_blank",
                         //title : title,
                         href: 'team_match.jsx?tid=' + this.props.turnirId + '&uid=' + game.id
                     }).addClass('team_match_link').data('uid', game.id).text(game.score), game, white, black);
                 }
                 else {
-                    return this.props.gameLink_extra(jQuery("<a>").attr({
+                    return this.props.gameLink_extra($("<a>").attr({
                         target: "_blank",
                         href: this.props.urlArhivaPartija + game.id,
                         title: title
@@ -125,86 +126,86 @@ var TurnirTabela;
             var tabs = groups.length > 1;
             var ul;
             if (tabs) {
-                ul = jQuery("<ul>").appendTo(this.table);
+                ul = $("<ul>").appendTo(this.table);
             }
             for (var n = 0; n < groups.length; ++n) {
                 var group = groups[n];
                 var anchor;
                 if (tabs) {
-                    anchor = jQuery("<a>").attr("href", "#grupa" + n);
-                    jQuery("<li>").append(anchor).appendTo(ul);
+                    anchor = $("<a>").attr("href", "#grupa" + n);
+                    $("<li>").append(anchor).appendTo(ul);
                 }
-                var div = jQuery("<div>").attr("id", "grupa" + n).appendTo(this.table);
+                var div = $("<div>").attr("id", "grupa" + n).appendTo(this.table);
                 if ('name' in group && group.name != null && group.name != '') {
-                    div.append(jQuery("<b>").text(group.name));
+                    div.append($("<b>").text(group.name));
                     if (anchor)
                         anchor.text(group.name);
                 }
                 else if (groups.length > 1) {
-                    div.append(jQuery("<b>").text('Grupa ' + n));
+                    div.append($("<b>").text('Grupa ' + n));
                     if (anchor)
                         anchor.text('Grupa ' + n);
                 }
                 if (this.props.damaAdmin) {
                     div.append(' ')
-                        .append(jQuery("<input>").attr({
+                        .append($("<input>").attr({
                         type: 'text',
                         name: 'name' + n,
                         size: 64
                     }).val(this.props.turnir))
-                        .append(jQuery("<button>").attr({
+                        .append($("<button>").attr({
                         type: 'submit',
                         name: 'split' + n
                     }).val('true').text('Split')); // TODO : was true (without quotes)
                 }
-                div.append(jQuery("<br>"));
-                var table = jQuery("<table>").attr('border', 1).addClass("turnirskaTablica")
+                div.append($("<br>"));
+                var table = $("<table>").attr('border', 1).addClass("turnirskaTablica")
                     .appendTo(div);
-                var thead = jQuery("<thead>").appendTo(table);
-                var headRow = jQuery("<tr>")
-                    .append(jQuery("<th>").attr('colspan', 2).addClass('tt1').html("&nbsp;"));
+                var thead = $("<thead>").appendTo(table);
+                var headRow = $("<tr>")
+                    .append($("<th>").attr('colspan', 2).addClass('tt1').html("&nbsp;"));
                 for (var m = 0; m < group.data.length; ++m) {
-                    jQuery("<th>").attr({
+                    $("<th>").attr({
                         align: 'center',
                         valign: 'bottom'
                     }).css('font-size', 'x-small')
                         .text(m + 1)
                         .appendTo(headRow);
                 }
-                headRow.append(jQuery("<th>").addClass('tt1').html("&nbsp;"));
+                headRow.append($("<th>").addClass('tt1').html("&nbsp;"));
                 if (this.props.show_sb) {
-                    headRow.append(jQuery("<th>").addClass('tt1').text("SB"));
+                    headRow.append($("<th>").addClass('tt1').text("SB"));
                 }
                 headRow.appendTo(thead);
-                var tbody = jQuery("<tbody>").appendTo(table);
+                var tbody = $("<tbody>").appendTo(table);
                 for (var nn = 0; nn < group.data.length; ++nn) {
                     var rc = this.props.rowClass[nn % this.props.rowClass.length];
                     var igrac = group.data[nn];
-                    var tr = jQuery("<tr>").appendTo(tbody);
-                    var tdd = jQuery("<td>").addClass(rc).css('font-size', 'small');
+                    var tr = $("<tr>").appendTo(tbody);
+                    var tdd = $("<td>").addClass(rc).css('font-size', 'small');
                     if (igrac.cc) {
-                        tdd.append(jQuery("<img>").attr({
+                        tdd.append($("<img>").attr({
                             src: this.props.urlFlag + '?c=' + igrac.cc,
                             title: igrac.country
                         })).append("&nbsp;");
                     }
                     var txx = igrac.tim ?
-                        jQuery("<span>")
+                        $("<span>")
                         :
-                            jQuery("<a>").attr({
+                            $("<a>").attr({
                                 target: "_blank",
                                 href: this.props.urlArhivaIgrac + (igrac.eid || igrac.id)
                             });
-                    tr.append(jQuery("<td>").addClass(rc).css('font-size', 'small').attr('align', 'right').text(nn + 1))
+                    tr.append($("<td>").addClass(rc).css('font-size', 'small').attr('align', 'right').text(nn + 1))
                         .append(tdd.append(txx.text(igrac.igrac))
-                        .append(jQuery("<input>").attr({
+                        .append($("<input>").attr({
                         type: "hidden",
                         name: 'igrac' + (n)
                     }).val(igrac.id)));
-                    var size = jQuery("td", tr).length;
+                    var size = $("td", tr).length;
                     for (var mm = 0; mm < group.data.length; ++mm) {
                         if (nn == mm) {
-                            tr.append(jQuery("<td>").attr('bgcolor', 'black').append(jQuery('<img>').attr({
+                            tr.append($("<td>").attr('bgcolor', 'black').append($('<img>').attr({
                                 border: 0,
                                 src: this.props.filler,
                                 width: 24,
@@ -212,14 +213,14 @@ var TurnirTabela;
                             })));
                         }
                         else {
-                            tr.append(jQuery("<td>").addClass(rc).addClass('c').html("&nbsp;"));
+                            tr.append($("<td>").addClass(rc).addClass('c').html("&nbsp;"));
                         }
                     }
                     var makeGameLink = function (game) { return _this.gameLink(game, group.data[game.wh].igrac, group.data[game.bl].igrac); };
-                    var tds = jQuery("td", tr).slice(size);
+                    var tds = $("td", tr).slice(size);
                     for (var xx in igrac.games) {
                         var games = igrac.games[xx];
-                        var td = jQuery(tds[xx]).empty();
+                        var td = $(tds[xx]).empty();
                         if (Array.isArray(games)) {
                             for (var gg = 0; gg < games.length; ++gg) {
                                 if (gg > 0) {
@@ -234,10 +235,10 @@ var TurnirTabela;
                             td.append(makeGameLink(games));
                         }
                     }
-                    tr.append(jQuery("<td>").addClass(rc).addClass('r')
-                        .append(jQuery("<b>").text(igrac.score)).append(' (').append(igrac.count.toString()).append(')'));
+                    tr.append($("<td>").addClass(rc).addClass('r')
+                        .append($("<b>").text(igrac.score)).append(' (').append(igrac.count.toString()).append(')'));
                     if (this.props.show_sb) {
-                        tr.append(jQuery("<td>").addClass(rc).addClass('r').text(igrac.sb));
+                        tr.append($("<td>").addClass(rc).addClass('r').text(igrac.sb));
                     }
                 }
             }
@@ -256,7 +257,7 @@ var TurnirTabela;
             if (game.pozicija && lnk.length > 0) {
                 lnk[0].pozicija = game.pozicija; // TODO : !!!!!
                 lnk.mouseover(function (event) {
-                    var st = jQuery("#status"), h, diag_top, position = jQuery(event.target).position();
+                    var st = $("#status"), h, diag_top, position = $(event.target).position();
                     CP.crtaj(event.target.pozicija, "pozicija", false); // TODO event.target !!!
                     st.find("#bijeli").text(white + (game.wm == true ? ' *' : ''));
                     st.find("#crni").text(black + (game.wm == false ? '*' : ' '));
@@ -274,20 +275,20 @@ var TurnirTabela;
                         left: (position.left + 32) + "px",
                         display: 'block'
                     }).show();
-                }).mouseout(function (event) { return jQuery("#status").hide(); }).attr("title", null);
+                }).mouseout(function (event) { return $("#status").hide(); }).attr("title", null);
             }
             return lnk;
         };
     };
     TurnirTabela.init = function (tabela, props) {
-        var data = jQuery.ajax({
+        var data = $.ajax({
             url : 'http://w090c042.kapsch.co.at/forum/dama/service/dopisno_tabela/' + props.turnirId + (props.sort ? ('/sort/' + props.sort) : '') + (props.gr ? '/groups/true' : ''),
             headers: { 'Access-Control-Allow-Origin' : true },
             dataType : 'json'
         });
         console.log('Data: ', data);
         var obj = new Internal(tabela, props);
-        jQuery(function () {
+        $(function () {
             data.done(function (groups) {
                 console.log('Data is done: ', groups);
                 obj.turnir_tabela(groups);
@@ -296,3 +297,4 @@ var TurnirTabela;
         });
     };
 })(TurnirTabela || (TurnirTabela = {}));
+})(jQuery);
