@@ -282,7 +282,7 @@ var TurnirTabela;
     };
     TurnirTabela.init = function (tabela, props) {
         var data = $.ajax({
-            url : 'http://w090c042.kapsch.co.at/forum/dama/service/dopisno_tabela/' + props.turnirId + (props.sort ? ('/sort/' + props.sort) : '') + (props.gr ? '/groups/true' : ''),
+            url : 'https://e-dama.net/e/dama/service/dopisno_tabela/' + props.turnirId + (props.sort ? ('/sort/' + props.sort) : '') + (props.gr ? '/groups/true' : ''),
             headers: { 'Access-Control-Allow-Origin' : true },
             dataType : 'json'
         });

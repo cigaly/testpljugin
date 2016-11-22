@@ -48,8 +48,8 @@ return '<div id="table_here" ></div>' .
 '<script>' .
 'jQuery(document).ready(function() {' .
 'var table=jQuery("#table_here");' .
-'TurnirTabela.init(table, { sort : "pl", gr : false, turnirId : ' . $content . ', rowClass : [ "row1", "row2" ], urlArhivaIgrac : "http://w090c042.kapsch.co.at/forum/viewprofile.fo?u=", ' .
-'urlArhivaPartija : "http://w090c042.kapsch.co.at/forum/dama/game.vm?game=", urlFlag : "http://w090c042.kapsch.co.at/forum/flag.fo", filler : "http://w090c042.kapsch.co.at/forum/images/black-pixel.png",' .
+'TurnirTabela.init(table, { sort : "pl", gr : false, turnirId : ' . $content . ', rowClass : [ "row1", "row2" ], urlArhivaIgrac : "https://e-dama.net/e/viewprofile.fo?u=", ' .
+'urlArhivaPartija : "https://e-dama.net/e/dama/game.vm?game=", urlFlag : "https://e-dama.net/e/flag.fo", filler : "https://e-dama.net/e/images/black-pixel.png",' .
 'damaAdmin : false, show_sb : true, gameLink_extra : TurnirTabela.gameLink_extra(table), turnir : "Third Team Championship on E-Dama" });' .
 '});' .
 '</script>'
