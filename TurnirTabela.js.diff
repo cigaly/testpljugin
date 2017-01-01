@@ -1,0 +1,25 @@
+--- TurnirTabela.js.orig	2016-12-31 23:52:07.000000000 +0100
++++ TurnirTabela.js	2017-01-01 12:22:48.397789889 +0100
+@@ -1,6 +1,7 @@
+ // $Id: CrtacPozicije.ts 18683 2016-04-29 15:06:59Z cigaly $
+ /// <reference path="include/misc.d.ts"/>
+ /// <reference path="typings/jquery/jquery.d.ts"/>
++var TurnirTabela = (function($) {
+ var CrtacPozicije = (function () {
+     function CrtacPozicije(f, sizeIsIgnored, bcs, engine) {
+         var _this = this;
+@@ -556,7 +557,7 @@
+         };
+     };
+     TurnirTabela.init = function (tabela, props) {
+-        var data = $.getJSON('service/' + props.serviceName + '/' + props.turnirId + (props.sort ? ('/sort/' + props.sort) : '') + (props.gr ? '/groups/true' : ''));
++        var data = $.getJSON('https://e-dama.net/e/dama/service/dopisno_tabela/' + props.turnirId + (props.sort ? ('/sort/' + props.sort) : '') + (props.gr ? '/groups/true' : ''));
+         var obj = new Internal(tabela, props);
+         $(function () {
+             data.done(function (groups) {
+@@ -584,3 +585,5 @@
+         } t.b("</td>"); t.b("\n" + i); t.b("          <td style=\"text-align: center;\">"); t.b(t.v(t.f("result", c, p, 0))); t.b("</td>"); t.b("\n" + i); t.b("        </tr>"); t.b("\n" + i); });
+         c.pop();
+     } t.b("    </table></td>"); t.b("\n" + i); t.b("  </tr>"); t.b("\n" + i); t.b("</table>"); return t.fl(); }, partials: {}, subs: {} });
++  return TurnirTabela;
++})(jQuery);

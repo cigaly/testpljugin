@@ -14,8 +14,13 @@ Author URI: http://www.tipsfor.us/
 
 // Tie into WordPress Hooks and any functions that should run on load.
 //add_filter('the_content', 'diggthis_get_button');
+
 add_action('init','dama_tabela_add_js_to_doc_head');
 add_shortcode('dama_tabela', 'dama_tabela_shortcode');
+
+add_action('init','dama_partija_add_js_to_doc_head');
+add_shortcode('dama_partija', 'dama_partija_shortcode');
+
 add_action('init','add_cors_http_header');
 
 // "Private" internal functions named with a leading underscore
@@ -59,10 +64,41 @@ return '<div id="table_here" ></div>' .
 function dama_tabela_add_js_to_doc_head() {
   $src = plugins_url('TurnirTabela.js', __FILE__);
   //wp_register_script( 'turnir_tabela', $src );
+  wp_enqueue_script( 'hogan', 'https://cdnjs.cloudflare.com/ajax/libs/hogan.js/3.0.2/hogan.min.mustache.js' );
+  //wp_enqueue_script( 'turnir_tabela', plugins_url('TurnirTabela.js', __FILE__), array('jquery', 'jquery_ui', 'crtac_pozicije') );
+  wp_enqueue_script( 'turnir_tabela', plugins_url('TurnirTabela.js', __FILE__), array('jquery', 'jquery_ui', 'hogan') );
+//  wp_enqueue_script( 'crtac_pozicije', plugins_url('CrtacPozicije.js', __FILE__), array('jquery') );
+  //wp_register_script( 'jquery_ui', '//code.jquery.com/ui/1.11.4/jquery-ui.min.js' );
+  wp_enqueue_script( 'jquery_ui', '//code.jquery.com/ui/1.11.4/jquery-ui.min.js', array('jquery') );
+  wp_enqueue_style( 'dama_css', plugins_url( 'dama.css', __FILE__) );
+}
+
+function dama_partija_shortcode($raw_args, $content=null) {
+/*
+return '<div id="table_here" ></div>' .
+'<script>' .
+'jQuery(document).ready(function() {' .
+'var table=jQuery("#table_here");' .
+'TurnirTabela.init(table, { sort : "pl", gr : false, turnirId : ' . $content . ', rowClass : [ "row1", "row2" ], urlArhivaIgrac : "https://e-dama.net/e/viewprofile.fo?u=", ' .
+'urlArhivaPartija : "https://e-dama.net/e/dama/game.vm?game=", urlFlag : "https://e-dama.net/e/flag.fo", filler : "https://e-dama.net/e/images/black-pixel.png",' .
+'damaAdmin : false, show_sb : true, gameLink_extra : TurnirTabela.gameLink_extra(table), turnir : "Third Team Championship on E-Dama" });' .
+'});' .
+'</script>'
+;
+*/
+return '';
+}
+
+function dama_partija_add_js_to_doc_head() {
+/*
+  $src = plugins_url('TurnirTabela.js', __FILE__);
+  //wp_register_script( 'turnir_tabela', $src );
   wp_enqueue_script( 'turnir_tabela', plugins_url('TurnirTabela.js', __FILE__), array('jquery', 'jquery_ui', 'crtac_pozicije') );
   wp_enqueue_script( 'crtac_pozicije', plugins_url('CrtacPozicije.js', __FILE__), array('jquery') );
   //wp_register_script( 'jquery_ui', '//code.jquery.com/ui/1.11.4/jquery-ui.min.js' );
   wp_enqueue_script( 'jquery_ui', '//code.jquery.com/ui/1.11.4/jquery-ui.min.js', array('jquery') );
+  wp_enqueue_style( 'dama_css', plugins_url( 'dama.css', __FILE__) );
+*/
 }
 
 //function diggthis_check_wordpress_version() { }

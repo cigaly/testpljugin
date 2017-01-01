@@ -1,0 +1,7 @@
+.turnirskaTablica td {
+  padding: 1px;
+}
+
+table.turnirskaTablica {
+    border-collapse: collapse;
+}
