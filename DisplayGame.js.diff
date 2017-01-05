@@ -1,0 +1,16 @@
+--- DisplayGame.js.orig	2017-01-01 13:50:36.922445066 +0100
++++ DisplayGame.js	2017-01-01 14:20:02.943013345 +0100
+@@ -2,6 +2,7 @@
+ /// <reference path="include/dijagram.d.ts" />
+ /// <reference path="typings/es6-promise/es6-promise.d.ts" />
+ /// <reference path="typings/lodash/lodash.d.ts"/>
++var DisplayGame = (function($) {
+ var DisplayGame;
+ (function (DisplayGame) {
+     var Partija = (function () {
+@@ -315,3 +316,5 @@
+         return new Internal().displayGameInit(props);
+     };
+ })(DisplayGame || (DisplayGame = {}));
++return DisplayGame;
++})(jQuery);

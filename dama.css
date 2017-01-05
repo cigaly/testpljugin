@@ -4,4 +4,6 @@
 
 table.turnirskaTablica {
     border-collapse: collapse;
+    font-family: Verdana,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
 }
