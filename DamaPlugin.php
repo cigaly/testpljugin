@@ -6,6 +6,8 @@ class DamaPlugin {
 
 	const min_php_version = '5.2';
 	
+	const FIGURE = '{"id":167,"directory":"https://e-dama.net/e/dama/figura/167","width":32,"height":32,"bijelaDama":"wk","bijelaFigura":"wm","crnaDama":"bk","crnaFigura":"bm","praznoPolje":"bl","bijeloPolje":"wh","transparent":false}';
+	
 	public static function head() {
 	}
 	
@@ -26,43 +28,73 @@ class DamaPlugin {
 		wp_enqueue_script ( 'hogan', 'https://cdnjs.cloudflare.com/ajax/libs/hogan.js/3.0.2/hogan.min.mustache.js' );
 		wp_enqueue_script ( 'turnir_tabela', plugins_url ( 'js/TurnirTabela.js', __FILE__ ), array (
 				'jquery',
-				'jquery_ui',
+				'jquery-ui',
 				'hogan'
 		) );
 		
 		/* Partija */
 		
-		wp_enqueue_script ( 'ui_dijagram', plugins_url ( 'js/jquery.ui.dijagram.js', __FILE__ ), array (
-				'jquery',
-				'jquery_ui'
-		) );
-		wp_enqueue_script ( 'loadsh_custom', plugins_url ( 'js/lodash.custom.js', __FILE__ ) );
-		wp_enqueue_script ( 'display_game', plugins_url ( 'js/DisplayGame.js', __FILE__ ), array (
-				'ui_dijagram',
-				'lodash_custom'
-		) );
+// 		wp_enqueue_script ( 'ui_dijagram', plugins_url ( 'js/jquery.ui.dijagram.js', __FILE__ ), array (
+// 				'jquery',
+// 				'jquery-ui'
+// 		), $in_footer = true );
+// 		wp_enqueue_script ( 'lodash_custom', plugins_url ( 'js/lodash.custom.js', __FILE__ ), $in_footer = true );
+// 		wp_enqueue_script ( 'display_game', plugins_url ( 'js/DisplayGame.js', __FILE__ ), array (
+// 				'ui_dijagram',
+// 				'lodash_custom'
+// 		), $in_footer = true );
 	}
 
 	private static function add_cors_http_header() {
 		header ( "Access-Control-Allow-Origin: *" );
 	}
 
-	public $display_game_loaded = false;
+// 	public $display_game_loaded = false;
+	public $game_type_loaded = array();
 	
 	public function tabela_shortcode($raw_args, $content = null) {
-		return '<div id="table_here" ></div>' . '<script>' . 'jQuery(document).ready(function() {' . 'var table=jQuery("#table_here");' . 'TurnirTabela.init(table, { sort : "pl", gr : false, turnirId : ' . $content . ', rowClass : [ "row1", "row2" ], urlArhivaIgrac : "https://e-dama.net/e/viewprofile.fo?u=", ' . 'urlArhivaPartija : "https://e-dama.net/e/dama/game.vm?game=", urlFlag : "https://e-dama.net/e/flag.fo", filler : "https://e-dama.net/e/images/black-pixel.png",' . 'damaAdmin : false, show_sb : true, gameLink_extra : TurnirTabela.gameLink_extra(table), turnir : "Third Team Championship on E-Dama" });' . '});' . '</script>';
+		return
+		'<div id="table_here" ></div>' .
+		'<script>' .
+			'jQuery(document).ready(function() {' .
+				'var table=jQuery("#table_here");' .
+				'TurnirTabela.init(table, {' .
+					'sort : "pl",' .
+					'gr : false,' .
+					'turnirId : ' . $content . ',' .
+					'rowClass : [ "row1", "row2" ],' .
+					'urlArhivaIgrac : "https://e-dama.net/e/viewprofile.fo?u=",' .
+					'urlArhivaPartija : "https://e-dama.net/e/dama/game.vm?game=",' .
+					'urlFlag : "https://e-dama.net/e/flag.fo",' .
+					'filler : "https://e-dama.net/e/images/black-pixel.png",' .
+					'damaAdmin : false,' .
+					'show_sb : true,' .
+					'gameLink_extra : TurnirTabela.gameLink_extra(table),' .
+					'turnir : "Third Team Championship on E-Dama"' .
+				'});' .
+			'});' .
+		'</script>';
 	}
 	
-	public function partija_shortcode($raw_args, $content = null) {
-		if ($this->display_game_loaded) {
-			$scr = "";
-		} else {
-			$scr = 
-				'<script src="' . plugins_url ( 'engine_20.min.js', __FILE__ ) . '"></script>' .
-				'<script src="' . plugins_url ( 'DisplayGame.js', __FILE__ ) . '"></script>';
-			$this->display_game_loaded = true;
+	public function partija_shortcode($raw_args, $json = null) {
+		$gameType = json_decode($json)->gameType;
+		if (!in_array($gameType, $this->game_type_loaded)) {
+			wp_enqueue_script ( 'js/engine_' . $gameType, plugins_url ( 'js/engine_' . $gameType . '.min.js', __FILE__ ),
+					$in_footer = true );
+			if (count($this->game_type_loaded) == 0) {
+				wp_enqueue_script ( 'ui_dijagram', plugins_url ( 'js/jquery.ui.dijagram.js', __FILE__ ), array (
+					'jquery',
+					'jquery-ui'
+				), $in_footer = true );
+				wp_enqueue_script ( 'lodash_custom', plugins_url ( 'js/lodash.custom.js', __FILE__ ), $in_footer = true );
+				wp_enqueue_script ( 'display_game', plugins_url ( 'js/DisplayGame.js', __FILE__ ), array (
+					'ui_dijagram',
+					'lodash_custom'
+				), $in_footer = true );
+			}
+			$this->game_type_loaded[] = $gameType;
 		}
-		return $scr . $this->show_board($content, uniqid());
+		return $this->show_board($json, uniqid());
 	}
 	
 	private function show_board($game, $ID = false) {
@@ -70,8 +102,6 @@ class DamaPlugin {
 			$ID = uniqid();
 		}
 		return
-		'<!-- JSON : ' . $game . '-->' .
-		'<!-- JSON decoded : ' . print_r(json_decode($game), true) . '-->' .
 		'<div id="DIV_' . $ID . '">' .
 		'<table class="forumline" style="width: 100%;" border="0" cellspacing="3" cellpadding="3" align="center">' .
 		  '<tr>' .
@@ -97,16 +127,16 @@ class DamaPlugin {
 		'</table>' .
 		'</div>' .
 		'<script>' .
-		  '$(function() {' .
+		  'jQuery(function() {' .
 		    'var json = ' . $game . ';' .
-		    'DisplayProblem.init({' .
+		    'DisplayGame.init({' .
 		          'gameType   : json.gameType,' .
-		          'figure     : ${FIGURE},' .
+				  'figure : ' . self::FIGURE . ',' .
 		          'game       : json.game.v,' .
 		          'pozicija   : json.position,' .
 		          'moveNumber : json.whiteMove,' .
 		          'whiteMove  : json.whiteMove,' .
-		          'board      : $("#DIV_' . $ID . '"),' .
+		          'board      : jQuery("#DIV_' . $ID . '"),' .
 		          'idPotezi   : "t_' . $ID . '",' .
 		          'idPozicija : "p_' . $ID . '",' .
 		          'iconPlus   : "' . plugins_url ( 'images/icon_plus.gif', __FILE__ ) . '",' .
@@ -116,7 +146,7 @@ class DamaPlugin {
 		          'nav_next   : "#DIV_' . $ID . ' .nav_next",' .
 		          'nav_end    : "#DIV_' . $ID . ' .nav_end",' .
 		          'nav_auto   : "#DIV_' . $ID . ' .nav_auto",' .
-		          'prefix     : "_' . $ID . '_"' .
+// 		          'prefix     : "_' . $ID . '_"' .
 		    '});' .
 		  '});' .
 		'</script>';

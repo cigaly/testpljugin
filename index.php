@@ -10,7 +10,7 @@
 
 // include() or require() any necessary files here...
 
-include_once('includes/DamaPlugin.php');
+include_once('DamaPlugin.php');
 
 $_dama_plugin = new DamaPlugin();
 
