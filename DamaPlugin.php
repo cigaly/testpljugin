@@ -103,28 +103,28 @@ class DamaPlugin {
 		}
 		return
 		'<div id="DIV_' . $ID . '">' .
-		'<table class="forumline" style="width: 100%;" border="0" cellspacing="3" cellpadding="3" align="center">' .
-		  '<tr>' .
-		    '<td class="row2" style="vertical-align:top;" align="center">' .
-		      '<br /><table border="1">' .
-		        '<tr><td><table id="p_' . $ID . '" class="pozicija" border="3">' .
-		          '<tr><td style="text-align: right;"><div class="bodyCount broj-figura">20 - 20</div></td></tr>' .
-		          '<tr><td id="pozicija_' . $ID . '"></td></tr>' .
-		        '</table></td></tr>' .
-		        '<tr class="navigacija"><td align="center">' .
-		          '<span class="nav_start"><img src="' . plugins_url ( 'images/nav_start.gif', __FILE__ ) . '" alt="start" /></span>' .
-		          '<span class="nav_prev"><img src="' . plugins_url ( 'images/nav_prev.gif', __FILE__ ) . '" alt="prev" /></span>' .
-		          '<span class="nav_next"><img src="' . plugins_url ( 'images/nav_next.gif', __FILE__ ) . '" alt="next" /></span>' .
-		          '<span class="nav_end"><img src="' . plugins_url ( 'images/nav_end.gif', __FILE__ ) . '" alt="end" /></span>' .
-		          '<span class="nav_auto"><img src="' . plugins_url ( 'images/nav_auto.gif', __FILE__ ) . '" alt="auto" /></span>' .
-		        '</td></tr>' .
-		      '</table><br />' .
-		    '</td>' .
-		    '<td class="row2" style="vertical-align:top;">' .
+		'<div id="dijagram_analiza" class="forumline" style="width: 100%;" border="0" cellspacing="3" cellpadding="3" align="center">' .
+		  '' .
+		    '<div class="row2" style="vertical-align:top;margin-left:auto;margin-right:auto;">' .
+		      '<br /><div id="dijagram" style="width:322px;border-style:solid;border-width:1px;">' .
+		        '<div id="p_' . $ID . '" class="pozicija">' .
+		          '<div style="text-align: right;"><div class="bodyCount broj-figura">20 - 20</div></div>' .
+		          '<div id="pozicija_' . $ID . '"></div>' .
+		        '</div>' .
+		        '<div class="navigacija" align="center">' .
+		          '<span class="nav_start"><img height="26px" src="' . plugins_url ( 'images/nav_start.gif', __FILE__ ) . '" alt="start" /></span>' .
+		          '<span class="nav_prev"><img height="26px" src="' . plugins_url ( 'images/nav_prev.gif', __FILE__ ) . '" alt="prev" /></span>' .
+		          '<span class="nav_next"><img height="26px" src="' . plugins_url ( 'images/nav_next.gif', __FILE__ ) . '" alt="next" /></span>' .
+		          '<span class="nav_end"><img height="26px" src="' . plugins_url ( 'images/nav_end.gif', __FILE__ ) . '" alt="end" /></span>' .
+		          '<span class="nav_auto"><img height="26px" src="' . plugins_url ( 'images/nav_auto.gif', __FILE__ ) . '" alt="auto" /></span>' .
+		        '</div>' .
+		      '</div><br />' .
+		    '</div>' .
+		    '<div class="row2" style="vertical-align:top; max-height: 180px; overflow-y: scroll; padding-right: 12px;text-align:left;padding-left:4px;padding-bottom:3px;">' .
 		      '<div id="t_' . $ID . '"></div>' .
-		    '</td>' .
-		  '</tr>' .
-		'</table>' .
+		    '</div>' .
+		  '' .
+		'</div>' .
 		'</div>' .
 		'<script>' .
 		  'jQuery(function() {' .

@@ -464,7 +464,7 @@ var TurnirTabela;
                 if (igrac.cc) {
                     tdd.append($("<img>").attr({
                         src: this.props.urlFlag + '?c=' + igrac.cc,
-                        title: igrac.country
+                        title: igrac.country, alt: igrac.cc
                     })).append("&nbsp;");
                 }
                 var txx = igrac.tim ?
